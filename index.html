@@ -500,12 +500,16 @@
     <div class="right-header">
       <div class="right-title" id="right-title">와이어프레임 결과</div>
       <div class="plan-tabs" id="plan-tabs"></div>
-      <select id="width-select" onchange="applyWidth(this.value)" style="font-size:11px;padding:4px 24px 4px 8px;border:1px solid #d9dbe2;border-radius:4px;color:#444;background:#fff url(\'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' fill=\'none\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23888\' stroke-width=\'1.5\' stroke-linecap=\'round\'/%3E%3C/svg%3E\') no-repeat right 8px center;appearance:none;cursor:pointer;outline:none;font-family:inherit;">
-        <option value="100%">너비 제한 없음</option>
-        <option value="1200px" selected>1200px</option>
-        <option value="1400px">1400px</option>
-        <option value="1600px">1600px</option>
-      </select>
+      <div style="display:flex;align-items:center;gap:6px;background:#f0f4ff;border:1px solid #c0ccee;border-radius:6px;padding:4px 10px;">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="1.5" stroke="#1a49bd" stroke-width="1.2"/><path d="M1 4h10" stroke="#1a49bd" stroke-width="1.2"/></svg>
+        <select id="width-select" onchange="applyWidth(this.value)" style="font-size:11px;font-weight:500;border:none;background:transparent;color:#1a49bd;cursor:pointer;outline:none;font-family:inherit;padding-right:4px;">
+          <option value="100%">너비 제한 없음</option>
+          <option value="1200px" selected>1200px</option>
+          <option value="1400px">1400px</option>
+          <option value="1600px">1600px</option>
+        </select>
+        <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1a49bd" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </div>
     </div>
     <div class="result-area" id="result-area">
       <div class="empty-state">
@@ -651,6 +655,7 @@ function renderCurrentPlan() {
   const plan = plans[currentPlan];
   const badges = ['a','b','c','d'];
   const labels = ['A안','B안','C안','D안'];
+  const wfWidth = document.getElementById('width-select')?.value || '1200px';
 
   document.getElementById('result-area').innerHTML = `
     <div class="plan-card">
@@ -659,22 +664,56 @@ function renderCurrentPlan() {
         <div class="plan-name">${plan.name || ''}</div>
       </div>
       <div class="plan-body">
-        <div class="rationale-box">
-          <div class="r-title">설계 근거 (KRDS 기준)</div>
-          <p>${plan.rationale || ''}</p>
-        </div>
-        ${plan.missing ? `
-        <div class="missing-box">
-          <div class="m-title">⚠ 누락 기능 검토</div>
-          ${plan.missing}
-        </div>` : ''}
-        <div class="wireframe-render" style="overflow:auto;">
-          <div style="display:flex;justify-content:center;min-width:100%;">
-            <iframe id="wf-iframe" srcdoc="${escapeAttr(plan.wireframe || '')}" style="height:${plan.height || 600}px;width:${document.getElementById('width-select')?.value || '1200px'};flex-shrink:0;border:none;display:block;"></iframe>
+
+        <!-- 2분할: 블록 다이어그램 + 와이어프레임 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+
+          <!-- 좌: 블록 다이어그램 + 근거 -->
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;">블록 구조</div>
+            <div style="background:#f8f9fb;border:1px solid #e4e6ed;border-radius:6px;padding:12px;flex:1;">
+              ${renderBlockDiagram(plan)}
+            </div>
+            <div class="rationale-box" style="margin-bottom:0;">
+              <div class="r-title">설계 근거</div>
+              <p>${plan.rationale || ''}</p>
+            </div>
+            ${plan.missing ? `
+            <div class="missing-box" style="margin-bottom:0;">
+              <div class="m-title">⚠ 누락 기능 검토</div>
+              ${plan.missing}
+            </div>` : ''}
           </div>
+
+          <!-- 우: 와이어프레임 -->
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;">와이어프레임</div>
+            <div style="border:1px solid #e4e6ed;border-radius:6px;overflow:auto;flex:1;">
+              <div style="display:flex;justify-content:center;min-width:100%;">
+                <iframe id="wf-iframe" srcdoc="${escapeAttr(plan.wireframe || '')}" style="height:${plan.height || 600}px;width:${wfWidth};flex-shrink:0;border:none;display:block;"></iframe>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>`;
+}
+
+function renderBlockDiagram(plan) {
+  const colors = ['#e8edfc','#e6f4ee','#fff3e0','#fdecea','#f0f4ff','#f5f0ff'];
+  const textColors = ['#1a49bd','#0a7c42','#b45309','#c0392b','#1a49bd','#7c3aed'];
+  const blocks = plan.blocks || [];
+  if (!blocks.length) {
+    return '<div style="color:#bbb;font-size:12px;text-align:center;padding:20px 0;">블록 구조 정보 없음</div>';
+  }
+  return blocks.map((b, i) => {
+    const ci = i % colors.length;
+    return `<div style="background:${colors[ci]};border-radius:6px;padding:8px 12px;margin-bottom:6px;border-left:3px solid ${textColors[ci]};">
+      <div style="font-size:12px;font-weight:600;color:${textColors[ci]};">${b.name}</div>
+      ${b.desc ? `<div style="font-size:11px;color:#666;margin-top:2px;">${b.desc}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 function applyWidth(val) {
@@ -696,7 +735,11 @@ function parseResponse(text) {
     const plans = planBlocks.map(block => {
       const b = block[1];
       const get = (tag) => { const m = b.match(new RegExp(`===${tag}===([\\s\\S]*?)===${tag}_END===`)); return m ? m[1].trim() : ''; };
-      return { name: get('NAME'), rationale: get('RATIONALE'), missing: get('MISSING'), height: parseInt(get('HEIGHT')) || 600, wireframe: get('WIREFRAME') };
+      const blocksRaw = get('BLOCKS');
+      const blocks = blocksRaw ? blocksRaw.split('\n').filter(l=>l.trim()).map(l=>{
+        const [name,...rest]=l.split('|'); return {name:name.trim(),desc:rest.join('|').trim()};
+      }) : [];
+      return { name: get('NAME'), rationale: get('RATIONALE'), missing: get('MISSING'), blocks, height: parseInt(get('HEIGHT')) || 600, wireframe: get('WIREFRAME') };
     });
     return { page_title: titleMatch ? titleMatch[1].trim() : '와이어프레임 결과', plans };
   }
@@ -739,7 +782,7 @@ async function sendMessage() {
         body: JSON.stringify({
           system_instruction: { parts: [{ text: getSystemPrompt() }] },
           contents: conversationHistory,
-          generationConfig: { maxOutputTokens: 8192, temperature: 0.7 }
+          generationConfig: { maxOutputTokens: 16000, temperature: 0.7 }
         })
       }
     );
@@ -840,16 +883,22 @@ KRDS CDN 사용 여부는 자유롭게 판단하세요.
 안 이름 (예: 좌우 분할형)
 ===NAME_END===
 ===RATIONALE===
-이 구조를 선택한 근거 2~3문장. 사용자 행동, 정보 우선순위, 공공기관 특성 기반으로 설명.
+이 구조를 선택한 근거 2~3문장.
 ===RATIONALE_END===
 ===MISSING===
-누락 가능 기능 제안 (없으면 비워두기)
+누락 가능 기능 (없으면 비워두기)
 ===MISSING_END===
+===BLOCKS===
+블록명1|설명1
+블록명2|설명2
+블록명3|설명3
+(화면을 구성하는 주요 블록을 위에서 아래 순서로 나열. 파이프(|)로 블록명과 설명 구분)
+===BLOCKS_END===
 ===HEIGHT===
 600
 ===HEIGHT_END===
 ===WIREFRAME===
-완전한 HTML 코드. width:100% 기준 레이아웃. 와이어프레임 스타일(회색 계열). 실제 동작 인터랙션. 한국어 예시 데이터.
+완전한 HTML 코드. width:100% 레이아웃. 회색 계열 와이어프레임. 인터랙션 포함. 한국어 데이터.
 ===WIREFRAME_END===
 ===PLAN_END===
 
