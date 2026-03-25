@@ -458,7 +458,15 @@ async function sendMessage() {
     const data = await response.json();
 
     if (data.error) {
-      throw new Error(data.error.message || 'API 오류');
+      const code = data.error.code;
+      const msg = data.error.message || '';
+      if (code === 429 || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota')) {
+        throw new Error('__QUOTA__');
+      } else if (code === 400 || msg.includes('API_KEY_INVALID') || msg.includes('invalid')) {
+        throw new Error('__INVALID_KEY__');
+      } else {
+        throw new Error(data.error.message || 'API 오류');
+      }
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -483,8 +491,20 @@ async function sendMessage() {
     document.getElementById('right-title').textContent = parsed.page_title || '와이어프레임 결과';
 
   } catch (err) {
-    document.getElementById('result-area').innerHTML = `<div style="padding:20px"><div class="error-box">오류: ${err.message}</div></div>`;
-    addMessage('ai', `오류가 발생했어요: ${err.message}`);
+    let userMsg = '';
+    let boxMsg = '';
+    if (err.message === '__QUOTA__') {
+      userMsg = '오늘 사용 한도를 초과했어요. 내일 자정(태평양 시간) 이후 다시 사용 가능해요. (Gemini 무료 티어 기준: 일 250회)';
+      boxMsg = '⚠ 일일 사용 한도 초과 — 내일 다시 시도해주세요.';
+    } else if (err.message === '__INVALID_KEY__') {
+      userMsg = 'API 키가 올바르지 않아요. 키를 다시 확인해주세요.';
+      boxMsg = '⚠ 유효하지 않은 API 키입니다.';
+    } else {
+      userMsg = '오류가 발생했어요. 잠시 후 다시 시도해주세요. (' + err.message + ')';
+      boxMsg = '오류: ' + err.message;
+    }
+    document.getElementById('result-area').innerHTML = '<div style="padding:20px"><div class="error-box">' + boxMsg + '</div></div>';
+    addMessage('ai', userMsg);
     conversationHistory.pop();
   }
 
