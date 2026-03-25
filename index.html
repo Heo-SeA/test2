@@ -395,7 +395,13 @@
       <div class="panel-section-title">설정</div>
 
       <div class="tool-field">
-        <label>Gemini API 키</label>
+        <label style="display:flex;align-items:center;justify-content:space-between;">
+          Gemini API 키
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:10px;color:#1a49bd;text-decoration:none;font-weight:500;display:flex;align-items:center;gap:3px;">
+            Google AI Studio
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#1a49bd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2H2a1 1 0 00-1 1v7a1 1 0 001 1h7a1 1 0 001-1V7"/><path d="M8 1h3v3"/><path d="M11 1L5.5 6.5"/></svg>
+          </a>
+        </label>
         <div class="api-key-wrap">
           <input type="password" id="api-key" placeholder="AIza..." oninput="checkKey()">
           <button class="toggle-key" onclick="toggleKey()">●</button>
