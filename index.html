@@ -3,178 +3,292 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UX 근거 설계 도구</title>
+<title>UX 근거 설계 도구 — KRDS 기반</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/krds-uiux@1.0.1/resources/cdn/krds.min.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
-
-  :root {
-    --bg: #0f0f11;
-    --surface: #17171a;
-    --surface2: #1e1e22;
-    --border: #2a2a30;
-    --border2: #38383f;
-    --text: #e8e8ec;
-    --text2: #9090a0;
-    --text3: #55555f;
-    --accent: #7c6af7;
-    --accent2: #5b4fd4;
-    --accent-dim: rgba(124,106,247,0.12);
-    --green: #3ecf8e;
-    --red: #f06060;
-    --amber: #f0a060;
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    font-family: 'PretendardGOV', 'Pretendard', sans-serif;
+    background: #f5f6f8;
+    color: #1a1a1a;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
-  header {
-    height: 48px;
-    border-bottom: 1px solid var(--border);
+  /* ── 헤더 ── */
+  .tool-header {
+    height: 52px;
+    background: #fff;
+    border-bottom: 1px solid #d9dbe2;
     display: flex;
     align-items: center;
     padding: 0 20px;
     gap: 12px;
     flex-shrink: 0;
-    background: var(--surface);
   }
-  .logo { font-size: 13px; font-weight: 700; letter-spacing: -0.3px; }
-  .logo span { color: var(--accent); }
-  .header-badge {
-    font-size: 10px; padding: 2px 8px; border-radius: 20px;
-    background: var(--accent-dim); color: var(--accent); font-weight: 500;
+  .tool-logo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a49bd;
+    letter-spacing: -0.3px;
+  }
+  .tool-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #e8edfc;
+    color: #1a49bd;
+    font-weight: 500;
+  }
+  .krds-label {
+    margin-left: auto;
+    font-size: 11px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .krds-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #1a49bd;
+    display: inline-block;
   }
 
+  /* ── 메인 레이아웃 ── */
   .main { display: flex; flex: 1; overflow: hidden; }
 
-  /* ── 좌측 ── */
+  /* ── 좌측 패널 ── */
   .left-panel {
-    width: 340px; flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    background: var(--surface);
-  }
-  .panel-header { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); }
-  .panel-title {
-    font-size: 11px; font-weight: 500; color: var(--text2);
-    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+    width: 320px;
+    flex-shrink: 0;
+    border-right: 1px solid #d9dbe2;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
   }
 
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: 11px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
-  .field textarea, .field input, .field select {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--text); font-family: 'Noto Sans KR', sans-serif;
-    font-size: 12px; padding: 8px 10px; resize: none; outline: none; transition: border-color .15s;
+  .panel-section {
+    padding: 16px;
+    border-bottom: 1px solid #eef0f4;
   }
-  .field textarea:focus, .field input:focus, .field select:focus { border-color: var(--accent); }
-  .field textarea { line-height: 1.6; }
-  .field select {
-    cursor: pointer; appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%239090a0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+  .panel-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 12px;
   }
 
+  /* KRDS 스타일 폼 요소 오버라이드 */
+  .tool-field { margin-bottom: 10px; }
+  .tool-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 4px;
+  }
+  .tool-field input[type="password"],
+  .tool-field input[type="text"],
+  .tool-field select,
+  .tool-field textarea {
+    width: 100%;
+    border: 1px solid #d9dbe2;
+    border-radius: 4px;
+    padding: 7px 10px;
+    font-size: 12px;
+    color: #1a1a1a;
+    background: #fff;
+    outline: none;
+    transition: border-color .15s;
+    font-family: inherit;
+    resize: none;
+  }
+  .tool-field input:focus,
+  .tool-field select:focus,
+  .tool-field textarea:focus {
+    border-color: #1a49bd;
+    box-shadow: 0 0 0 2px rgba(26,73,189,0.1);
+  }
+  .tool-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+    cursor: pointer;
+  }
+
+  .key-status { font-size: 11px; margin-top: 3px; }
+  .key-status.ok { color: #0a7c42; }
+  .key-status.empty { color: #999; }
+
+  /* 안 수 선택 */
   .count-row { display: flex; gap: 6px; }
   .count-btn {
-    flex: 1; padding: 7px; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 6px; color: var(--text2); font-size: 12px; cursor: pointer;
-    text-align: center; transition: all .15s; font-family: 'Noto Sans KR', sans-serif;
+    flex: 1; padding: 6px 4px;
+    border: 1px solid #d9dbe2;
+    border-radius: 4px;
+    background: #fff;
+    color: #555;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .15s;
+    font-family: inherit;
   }
-  .count-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 500; }
-
-  /* API 키 입력 */
-  .api-key-wrap { position: relative; }
-  .api-key-wrap input { padding-right: 36px; font-family: monospace; font-size: 11px; letter-spacing: 0.5px; }
-  .toggle-key {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer; color: var(--text3); font-size: 11px; padding: 2px;
+  .count-btn.active {
+    background: #1a49bd;
+    border-color: #1a49bd;
+    color: #fff;
+    font-weight: 500;
   }
-  .key-status { font-size: 10px; margin-top: 4px; }
-  .key-status.ok { color: var(--green); }
-  .key-status.empty { color: var(--text3); }
 
+  /* 채팅 히스토리 */
   .chat-history {
-    flex: 1; overflow-y: auto; padding: 14px 18px;
-    display: flex; flex-direction: column; gap: 10px;
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f8f9fb;
   }
   .chat-history::-webkit-scrollbar { width: 4px; }
-  .chat-history::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .chat-history::-webkit-scrollbar-thumb { background: #d9dbe2; border-radius: 2px; }
 
-  .msg { padding: 9px 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; }
+  .msg {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    max-width: 95%;
+  }
   .msg.user {
-    background: var(--accent-dim); border: 1px solid rgba(124,106,247,0.2);
-    color: var(--text); align-self: flex-end; max-width: 90%;
+    background: #1a49bd;
+    color: #fff;
+    align-self: flex-end;
+    border-radius: 8px 8px 2px 8px;
   }
   .msg.ai {
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text2); align-self: flex-start; max-width: 100%;
+    background: #fff;
+    border: 1px solid #e4e6ed;
+    color: #444;
+    align-self: flex-start;
+    border-radius: 8px 8px 8px 2px;
   }
 
-  .input-area { padding: 12px 18px 14px; border-top: 1px solid var(--border); }
+  /* 입력창 */
+  .input-area {
+    padding: 10px 16px 12px;
+    border-top: 1px solid #eef0f4;
+    background: #fff;
+  }
   .input-wrap { display: flex; gap: 8px; align-items: flex-end; }
   .input-wrap textarea {
-    flex: 1; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Noto Sans KR', sans-serif;
-    font-size: 12px; padding: 9px 12px; resize: none; outline: none;
-    max-height: 100px; transition: border-color .15s; line-height: 1.6;
+    flex: 1;
+    border: 1px solid #d9dbe2;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    color: #1a1a1a;
+    resize: none;
+    outline: none;
+    max-height: 80px;
+    line-height: 1.5;
+    transition: border-color .15s;
   }
-  .input-wrap textarea:focus { border-color: var(--accent); }
+  .input-wrap textarea:focus { border-color: #1a49bd; }
   .send-btn {
-    width: 36px; height: 36px; border-radius: 8px; background: var(--accent);
-    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: background .15s, transform .1s;
+    width: 34px; height: 34px;
+    border-radius: 4px;
+    background: #1a49bd;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background .15s;
   }
-  .send-btn:hover { background: var(--accent2); }
-  .send-btn:active { transform: scale(0.95); }
-  .send-btn:disabled { background: var(--border2); cursor: not-allowed; }
-  .input-hint { font-size: 10px; color: var(--text3); margin-top: 6px; }
+  .send-btn:hover { background: #1238a0; }
+  .send-btn:disabled { background: #c0c4d0; cursor: not-allowed; }
+  .input-hint { font-size: 10px; color: #aaa; margin-top: 5px; }
 
-  /* ── 우측 ── */
-  .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+  /* ── 우측 패널 ── */
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #f5f6f8;
+  }
   .right-header {
-    padding: 0 20px; height: 44px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    height: 44px;
+    padding: 0 20px;
+    background: #fff;
+    border-bottom: 1px solid #d9dbe2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
   }
-  .right-title { font-size: 12px; font-weight: 500; color: var(--text2); flex: 1; }
-  .plan-tabs { display: flex; gap: 6px; }
+  .right-title { font-size: 13px; font-weight: 600; color: #1a1a1a; flex: 1; }
+
+  /* 안 탭 */
+  .plan-tabs { display: flex; gap: 4px; }
   .plan-tab {
-    font-size: 11px; padding: 4px 12px; border-radius: 20px;
-    border: 1px solid var(--border); color: var(--text2); cursor: pointer;
-    background: none; font-family: 'Noto Sans KR', sans-serif; transition: all .15s;
+    font-size: 11px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid #d9dbe2;
+    color: #666;
+    cursor: pointer;
+    background: #fff;
+    font-family: inherit;
+    transition: all .15s;
   }
-  .plan-tab.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 500; }
+  .plan-tab.active {
+    background: #1a49bd;
+    border-color: #1a49bd;
+    color: #fff;
+    font-weight: 500;
+  }
 
   .result-area { flex: 1; overflow-y: auto; padding: 20px; }
   .result-area::-webkit-scrollbar { width: 4px; }
-  .result-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .result-area::-webkit-scrollbar-thumb { background: #d9dbe2; border-radius: 2px; }
 
+  /* 빈 상태 */
   .empty-state {
-    height: 100%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 14px; color: var(--text3);
+    height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; color: #aaa;
   }
   .empty-icon {
-    width: 56px; height: 56px; border: 1.5px dashed var(--border2);
-    border-radius: 16px; display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px;
+    border: 1.5px dashed #d9dbe2;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
   }
-  .empty-state p { font-size: 13px; }
-  .empty-state span { font-size: 11px; }
+  .empty-state p { font-size: 13px; color: #888; }
+  .empty-state span { font-size: 11px; color: #aaa; }
 
+  /* 로딩 */
   .loading-state {
-    height: 100%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 16px;
+    height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
   }
   .loading-dots { display: flex; gap: 6px; }
   .loading-dots span {
-    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #1a49bd;
     animation: bounce 1.2s infinite;
   }
   .loading-dots span:nth-child(2) { animation-delay: .2s; }
@@ -183,65 +297,113 @@
     0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
     40% { transform: scale(1); opacity: 1; }
   }
-  .loading-text { font-size: 13px; color: var(--text2); }
-  .loading-sub { font-size: 11px; color: var(--text3); }
+  .loading-text { font-size: 13px; color: #555; }
+  .loading-sub { font-size: 11px; color: #aaa; }
 
-  .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
-  .plan-card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .plan-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
-  .plan-badge.a { background: rgba(124,106,247,0.15); color: #9d8fff; }
-  .plan-badge.b { background: rgba(62,207,142,0.12); color: #3ecf8e; }
-  .plan-badge.c { background: rgba(240,160,96,0.12); color: #f0a060; }
-  .plan-badge.d { background: rgba(240,96,96,0.12); color: #f06060; }
-  .plan-name { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
+  /* 결과 카드 */
+  .plan-card {
+    background: #fff;
+    border: 1px solid #d9dbe2;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .plan-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef0f4;
+    display: flex; align-items: center; gap: 10px;
+    background: #fafbfc;
+  }
+  .plan-badge-label {
+    font-size: 11px; padding: 3px 10px;
+    border-radius: 3px; font-weight: 600;
+  }
+  .plan-badge-label.a { background: #e8edfc; color: #1a49bd; }
+  .plan-badge-label.b { background: #e6f4ee; color: #0a7c42; }
+  .plan-badge-label.c { background: #fff3e0; color: #b45309; }
+  .plan-badge-label.d { background: #fdecea; color: #c0392b; }
+  .plan-name { font-size: 13px; font-weight: 600; color: #1a1a1a; flex: 1; }
 
-  .plan-body { padding: 16px 18px; }
+  .plan-body { padding: 14px 16px; }
+
   .rationale-box {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;
+    background: #f0f4ff;
+    border-left: 3px solid #1a49bd;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    margin-bottom: 12px;
   }
   .rationale-box .r-title {
-    font-size: 10px; font-weight: 500; color: var(--accent);
-    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+    font-size: 10px; font-weight: 600;
+    color: #1a49bd; margin-bottom: 5px;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
-  .rationale-box p { font-size: 12px; color: var(--text2); line-height: 1.7; }
+  .rationale-box p { font-size: 12px; color: #444; line-height: 1.7; }
+
   .missing-box {
-    background: rgba(240,160,96,0.06); border: 1px solid rgba(240,160,96,0.2);
-    border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
-    font-size: 11px; color: var(--amber); line-height: 1.7;
+    background: #fffbf0;
+    border-left: 3px solid #d4860a;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 12px; color: #7a5200; line-height: 1.7;
   }
-  .missing-box .m-title { font-weight: 500; margin-bottom: 4px; }
-  .wireframe-render { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
+  .missing-box .m-title { font-weight: 600; margin-bottom: 4px; }
+
+  .wireframe-render {
+    border: 1px solid #d9dbe2;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+  }
   .wireframe-render iframe { width: 100%; border: none; display: block; }
+
   .error-box {
-    background: rgba(240,96,96,0.08); border: 1px solid rgba(240,96,96,0.2);
-    border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--red);
+    background: #fdecea;
+    border-left: 3px solid #c0392b;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    font-size: 12px; color: #8b0000;
+  }
+
+  /* key toggle */
+  .api-key-wrap { position: relative; }
+  .api-key-wrap input { padding-right: 36px; }
+  .toggle-key {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: #aaa; font-size: 11px; padding: 2px;
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">UX<span>·</span>AI</div>
-  <div class="header-badge">근거 기반 설계 도구 β</div>
-</header>
+<div class="tool-header">
+  <div class="tool-logo">UX 근거 설계 도구</div>
+  <div class="tool-badge">β</div>
+  <div class="krds-label">
+    <span class="krds-dot"></span> KRDS 기반
+  </div>
+</div>
 
 <div class="main">
+
   <!-- 좌측 -->
   <div class="left-panel">
-    <div class="panel-header">
-      <div class="panel-title">요구사항 입력</div>
 
-      <div class="field">
+    <div class="panel-section">
+      <div class="panel-section-title">설정</div>
+
+      <div class="tool-field">
         <label>Gemini API 키</label>
         <div class="api-key-wrap">
           <input type="password" id="api-key" placeholder="AIza..." oninput="checkKey()">
-          <button class="toggle-key" onclick="toggleKeyVisibility()" title="보기/숨기기">●</button>
+          <button class="toggle-key" onclick="toggleKey()">●</button>
         </div>
         <div class="key-status empty" id="key-status">API 키를 입력해주세요</div>
       </div>
 
-      <div class="field">
+      <div class="tool-field">
         <label>페이지 유형</label>
         <select id="page-type">
           <option value="">선택 (선택사항)</option>
@@ -254,12 +416,12 @@
         </select>
       </div>
 
-      <div class="field">
+      <div class="tool-field">
         <label>핵심 기능 / 구성 요소</label>
         <textarea id="features" rows="3" placeholder="예) 시계열 타임라인, 클릭 시 우측 상세 패널, 탭 구조 (정보/수행/성과/자료실)"></textarea>
       </div>
 
-      <div class="field">
+      <div class="tool-field">
         <label>제안 안 수</label>
         <div class="count-row">
           <div class="count-btn" onclick="setCount(2)">2개</div>
@@ -270,19 +432,19 @@
     </div>
 
     <div class="chat-history" id="chat-history">
-      <div class="msg ai">안녕하세요! Gemini API 키를 입력하고 요구사항을 보내주세요. 2~4개의 와이어프레임 안을 근거와 함께 제안해드립니다.</div>
+      <div class="msg ai">안녕하세요! KRDS 기반 와이어프레임 설계 도구입니다. API 키 입력 후 요구사항을 보내주세요.</div>
     </div>
 
     <div class="input-area">
       <div class="input-wrap">
-        <textarea id="chat-input" rows="1" placeholder="요구사항 입력 또는 추가 요청..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea id="chat-input" rows="1" placeholder="요구사항 또는 추가 요청 입력..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendMessage()">
-          <svg viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8 12V4M4 8l4-4 4 4"/>
           </svg>
         </button>
       </div>
-      <div class="input-hint">Enter로 전송 · Shift+Enter 줄바꿈</div>
+      <div class="input-hint">Enter 전송 · Shift+Enter 줄바꿈</div>
     </div>
   </div>
 
@@ -295,7 +457,7 @@
     <div class="result-area" id="result-area">
       <div class="empty-state">
         <div class="empty-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--border2)" stroke-width="1.5" stroke-linecap="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5" stroke-linecap="round">
             <rect x="3" y="3" width="18" height="18" rx="3"/>
             <path d="M3 9h18M9 21V9"/>
           </svg>
@@ -305,8 +467,10 @@
       </div>
     </div>
   </div>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/krds-uiux@1.0.1/resources/cdn/krds.min.js"></script>
 <script>
 let planCount = 3;
 let plans = [];
@@ -327,7 +491,7 @@ function checkKey() {
   }
 }
 
-function toggleKeyVisibility() {
+function toggleKey() {
   keyVisible = !keyVisible;
   document.getElementById('api-key').type = keyVisible ? 'text' : 'password';
 }
@@ -345,7 +509,7 @@ function handleKey(e) {
 
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
 
 function addMessage(role, text) {
@@ -361,7 +525,7 @@ function showLoading() {
   document.getElementById('result-area').innerHTML = `
     <div class="loading-state">
       <div class="loading-dots"><span></span><span></span><span></span></div>
-      <div class="loading-text">와이어프레임 설계 중...</div>
+      <div class="loading-text">KRDS 기반 와이어프레임 설계 중...</div>
       <div class="loading-sub">요구사항 분석 → 구조 설계 → 근거 생성</div>
     </div>`;
 }
@@ -389,12 +553,12 @@ function renderCurrentPlan() {
   document.getElementById('result-area').innerHTML = `
     <div class="plan-card">
       <div class="plan-card-header">
-        <div class="plan-badge ${badges[currentPlan]}">${labels[currentPlan]}</div>
+        <span class="plan-badge-label ${badges[currentPlan]}">${labels[currentPlan]}</span>
         <div class="plan-name">${plan.name || ''}</div>
       </div>
       <div class="plan-body">
         <div class="rationale-box">
-          <div class="r-title">설계 근거</div>
+          <div class="r-title">설계 근거 (KRDS 기준)</div>
           <p>${plan.rationale || ''}</p>
         </div>
         ${plan.missing ? `
@@ -413,27 +577,42 @@ function escapeAttr(str) {
   return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
+function parseResponse(text) {
+  // 방법1: ===PLAN_START=== 구분자 방식
+  if (text.includes('===PLAN_START===')) {
+    const titleMatch = text.match(/===PAGE_TITLE===([\s\S]*?)===PAGE_TITLE_END===/);
+    const planBlocks = [...text.matchAll(/===PLAN_START===([\s\S]*?)===PLAN_END===/g)];
+    const plans = planBlocks.map(block => {
+      const b = block[1];
+      const get = (tag) => { const m = b.match(new RegExp(`===${tag}===([\\s\\S]*?)===${tag}_END===`)); return m ? m[1].trim() : ''; };
+      return { name: get('NAME'), rationale: get('RATIONALE'), missing: get('MISSING'), height: parseInt(get('HEIGHT')) || 600, wireframe: get('WIREFRAME') };
+    });
+    return { page_title: titleMatch ? titleMatch[1].trim() : '와이어프레임 결과', plans };
+  }
+  // 방법2: JSON 파싱 시도 (fallback)
+  try {
+    const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/);
+    if (jsonMatch) return JSON.parse(jsonMatch[1]);
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start !== -1 && end !== -1) return JSON.parse(text.slice(start, end + 1));
+  } catch(e) {}
+  throw new Error('응답 파싱 실패 — 다시 시도해주세요.');
+}
+
 async function sendMessage() {
   if (isLoading) return;
-
   const apiKey = document.getElementById('api-key').value.trim();
-  if (!apiKey) {
-    addMessage('ai', 'Gemini API 키를 먼저 입력해주세요!');
-    return;
-  }
+  if (!apiKey) { addMessage('ai', 'Gemini API 키를 먼저 입력해주세요!'); return; }
 
   const input = document.getElementById('chat-input');
   const features = document.getElementById('features').value.trim();
   const pageType = document.getElementById('page-type').value;
   const userMsg = input.value.trim();
-
   if (!userMsg && !features) return;
 
-  const displayMsg = userMsg || features;
-  addMessage('user', displayMsg);
-  input.value = '';
-  input.style.height = 'auto';
-
+  addMessage('user', userMsg || features);
+  input.value = ''; input.style.height = 'auto';
   isLoading = true;
   document.getElementById('send-btn').disabled = true;
   showLoading();
@@ -456,54 +635,40 @@ async function sendMessage() {
     );
 
     const data = await response.json();
-
     if (data.error) {
       const code = data.error.code;
       const msg = data.error.message || '';
-      if (code === 429 || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota')) {
-        throw new Error('__QUOTA__');
-      } else if (code === 400 || msg.includes('API_KEY_INVALID') || msg.includes('invalid')) {
-        throw new Error('__INVALID_KEY__');
-      } else {
-        throw new Error(data.error.message || 'API 오류');
-      }
+      if (code === 429 || msg.includes('RESOURCE_EXHAUSTED')) throw new Error('__QUOTA__');
+      else if (code === 400 || msg.includes('API_KEY_INVALID')) throw new Error('__INVALID_KEY__');
+      else throw new Error(msg || 'API 오류');
     }
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     conversationHistory.push({ role: 'model', parts: [{ text }] });
 
-    // JSON 파싱
-    const jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*"plans"[\s\S]*\})/);
-    let parsed;
-    try {
-      parsed = JSON.parse(jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text);
-    } catch {
-      const clean = text.replace(/```json|```/g, '').trim();
-      parsed = JSON.parse(clean);
-    }
+    // 구분자 방식으로 파싱 (JSON 특수문자 충돌 방지)
+    const parsed = parseResponse(text);
 
     plans = parsed.plans || [];
     currentPlan = 0;
-
-    addMessage('ai', `${plans.length}개 안을 생성했어요. 우측에서 확인해보세요! 수정이 필요하면 추가로 말씀해주세요.`);
+    addMessage('ai', `${plans.length}개 안을 생성했어요. KRDS 컴포넌트 기준으로 설계되었습니다. 수정이 필요하면 말씀해주세요!`);
+    document.getElementById('right-title').textContent = parsed.page_title || '와이어프레임 결과';
     renderPlanTabs();
     renderCurrentPlan();
-    document.getElementById('right-title').textContent = parsed.page_title || '와이어프레임 결과';
 
   } catch (err) {
-    let userMsg = '';
-    let boxMsg = '';
+    let userMsg = '', boxMsg = '';
     if (err.message === '__QUOTA__') {
-      userMsg = '오늘 사용 한도를 초과했어요. 내일 자정(태평양 시간) 이후 다시 사용 가능해요. (Gemini 무료 티어 기준: 일 250회)';
+      userMsg = '오늘 사용 한도를 초과했어요. 내일 자정(태평양 시간) 이후 다시 사용 가능해요.';
       boxMsg = '⚠ 일일 사용 한도 초과 — 내일 다시 시도해주세요.';
     } else if (err.message === '__INVALID_KEY__') {
       userMsg = 'API 키가 올바르지 않아요. 키를 다시 확인해주세요.';
       boxMsg = '⚠ 유효하지 않은 API 키입니다.';
     } else {
-      userMsg = '오류가 발생했어요. 잠시 후 다시 시도해주세요. (' + err.message + ')';
-      boxMsg = '오류: ' + err.message;
+      userMsg = `오류가 발생했어요. 잠시 후 다시 시도해주세요. (${err.message})`;
+      boxMsg = `오류: ${err.message}`;
     }
-    document.getElementById('result-area').innerHTML = '<div style="padding:20px"><div class="error-box">' + boxMsg + '</div></div>';
+    document.getElementById('result-area').innerHTML = `<div style="padding:20px"><div class="error-box">${boxMsg}</div></div>`;
     addMessage('ai', userMsg);
     conversationHistory.pop();
   }
@@ -522,29 +687,123 @@ function buildPrompt(msg, features, pageType) {
 
 function getSystemPrompt() {
   return `당신은 한국 공공기관 웹사이트 UX 설계 전문가입니다.
-요구사항을 입력받으면 레이아웃 방향이 서로 다른 와이어프레임 안을 여러 개 제안합니다.
+KRDS(대한민국 정부 디자인 시스템) 기준으로 와이어프레임을 설계합니다.
 
-반드시 아래 JSON 형식으로만 응답하세요. 마크다운 코드블록('''json)으로 감싸도 됩니다. 다른 설명 텍스트는 불필요합니다.
+## KRDS CDN
+와이어프레임 HTML에 반드시 아래 CDN을 포함하세요:
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/krds-uiux@1.0.1/resources/cdn/krds.min.css">
+<script src="https://cdn.jsdelivr.net/npm/krds-uiux@1.0.1/resources/cdn/krds.min.js"><\/script>
 
-{
-  "page_title": "페이지명",
-  "plans": [
-    {
-      "name": "안 이름 (예: 좌우 분할형)",
-      "rationale": "이 구조를 선택한 근거 (사용자 행동, 정보 우선순위, 공공기관 특성 기반 2~3문장)",
-      "missing": "누락 가능한 기능 제안 (1~3줄, 없으면 빈 문자열)",
-      "height": 500,
-      "wireframe": "완전한 HTML 와이어프레임 코드. 실제로 동작하는 인터랙션 포함. 배경 흰색. 한국어 레이블. 실제 데이터 예시 포함. system-ui 폰트. 최소 400px 높이."
-    }
-  ]
-}
+## KRDS 주요 컴포넌트 클래스 (반드시 사용)
+
+**버튼:** <button class="krds-btn">버튼</button>
+  - 크기: large / medium(기본) / small
+  - 스타일: primary(기본) / secondary / text
+
+**탭:** 
+<div class="krds-tab-area layer">
+  <div class="tab line full">
+    <ul role="tablist">
+      <li role="tab" aria-selected="true" class="active"><button class="btn-tab">탭1</button></li>
+      <li role="tab" aria-selected="false"><button class="btn-tab">탭2</button></li>
+    </ul>
+  </div>
+  <div class="tab-conts-wrap">
+    <section class="tab-conts active">내용1</section>
+    <section class="tab-conts">내용2</section>
+  </div>
+</div>
+
+**테이블:**
+<div class="krds-table-wrap">
+  <table class="tbl col data">
+    <thead><tr><th scope="col">제목</th></tr></thead>
+    <tbody><tr><td>내용</td></tr></tbody>
+  </table>
+</div>
+
+**페이지네이션:**
+<div class="krds-pagination">
+  <span class="page-navi prev disabled">이전</span>
+  <div class="page-links"><a class="page-link active" href="#">1</a><a class="page-link" href="#">2</a></div>
+  <a class="page-navi next" href="#">다음</a>
+</div>
+
+**셀렉트:**
+<div class="form-group">
+  <div class="form-tit"><label>레이블</label></div>
+  <div class="form-conts"><select class="krds-form-select"><option>항목</option></select></div>
+</div>
+
+**텍스트 입력:**
+<div class="form-group">
+  <div class="form-tit"><label>레이블</label></div>
+  <div class="form-conts"><input type="text" class="krds-input" placeholder="입력"></div>
+</div>
+
+**뱃지:** <span class="krds-badge bg-primary">진행중</span>
+  - 색상: bg-primary / bg-success / bg-danger / bg-warning / bg-gray
+
+**브레드크럼:**
+<nav class="krds-breadcrumb-wrap"><ol class="breadcrumb"><li class="home"><a href="#" class="txt">홈</a></li><li><a href="#" class="txt">페이지</a></li></ol></nav>
+
+**아코디언:**
+<div class="krds-accordion"><div class="accordion-item">
+  <h5 class="accordion-header"><button class="btn-accordion" aria-controls="acc1">제목</button></h5>
+  <div id="acc1" class="accordion-collapse collapse"><div class="accordion-body">내용</div></div>
+</div></div>
+
+**사이드 네비게이션:**
+<nav class="krds-side-navigation"><h2 class="lnb-tit">메뉴</h2>
+  <ul class="lnb-list"><li class="lnb-item active"><button class="lnb-btn lnb-toggle active">메뉴1</button></li></ul>
+</nav>
+
+**스텝 인디케이터:**
+<ol class="krds-step-wrap">
+  <li class="done"><span><i class="step">1단계</i><span class="step-tit">레이블</span></span></li>
+  <li class="active"><span><i class="step">2단계</i><span class="step-tit">레이블</span></span></li>
+</ol>
+
+**구조화 목록:**
+<ul class="krds-structured-list type-full">
+  <li class="structured-item"><div class="in"><div class="card-body">
+    <a href="#" class="c-text"><p class="c-tit">타이틀</p><p class="c-date"><strong class="key">기간</strong><span class="value">날짜</span></p></a>
+    <div class="c-btn"><a href="#" class="krds-btn secondary">신청하기</a></div>
+  </div></div></li>
+</ul>
+
+## 응답 형식
+반드시 아래 구분자 형식으로만 응답하세요. JSON 사용 금지. 다른 설명 텍스트 없이 아래 형식만 출력하세요.
+
+===PAGE_TITLE===
+페이지명
+===PAGE_TITLE_END===
+
+===PLAN_START===
+===NAME===
+안 이름 (예: 좌우 분할형)
+===NAME_END===
+===RATIONALE===
+KRDS 컴포넌트 선택 근거 2~3문장. 어떤 KRDS 컴포넌트를 왜 사용했는지 명시.
+===RATIONALE_END===
+===MISSING===
+누락 가능 기능 (없으면 비워두기)
+===MISSING_END===
+===HEIGHT===
+600
+===HEIGHT_END===
+===WIREFRAME===
+완전한 HTML 코드. KRDS CDN 포함. KRDS 클래스 사용. 실제 동작 인터랙션. 한국어 예시 데이터. 배경 흰색.
+===WIREFRAME_END===
+===PLAN_END===
+
+(안 수만큼 PLAN_START~PLAN_END 반복)
 
 규칙:
-- 각 안은 레이아웃 구조가 명확히 달라야 함 (단순 색상 변경 금지)
-- 실제 동작하는 클릭/탭/필터 인터랙션 포함
-- 공공기관 스타일의 실제 예시 데이터 사용
-- CSS는 style 태그, JS는 script 태그 안에 작성
-- height는 와이어프레임 실제 높이(px)`;
+- 각 안은 레이아웃 방향이 명확히 달라야 함
+- KRDS 컴포넌트를 최대한 활용 (커스텀 CSS 최소화)
+- 실제 공공기관 데이터 예시 사용
+- height는 실제 콘텐츠 높이(px 숫자만)`;
 }
 </script>
 </body>
