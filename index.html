@@ -664,12 +664,11 @@ async function sendMessage() {
   if (!apiKey) { addMessage('ai', 'Gemini API 키를 먼저 입력해주세요!'); return; }
 
   const input = document.getElementById('chat-input');
-  const features = document.getElementById('features').value.trim();
-  const pageType = document.getElementById('page-type').value;
   const userMsg = input.value.trim();
-  if (!userMsg && !features) return;
+  const hasFilled = ['svc-purpose','svc-user','req-features'].some(id => document.getElementById(id)?.value.trim());
+  if (!userMsg && !hasFilled) return;
 
-  addMessage('user', userMsg || features);
+  addMessage('user', userMsg || '양식 내용으로 요청');
   input.value = ''; input.style.height = 'auto';
   isLoading = true;
   document.getElementById('send-btn').disabled = true;
