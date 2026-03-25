@@ -500,16 +500,12 @@
     <div class="right-header">
       <div class="right-title" id="right-title">와이어프레임 결과</div>
       <div class="plan-tabs" id="plan-tabs"></div>
-      <div style="display:flex;align-items:center;gap:6px;background:#f0f4ff;border:1px solid #c0ccee;border-radius:6px;padding:4px 10px;">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="1.5" stroke="#1a49bd" stroke-width="1.2"/><path d="M1 4h10" stroke="#1a49bd" stroke-width="1.2"/></svg>
-        <select id="width-select" onchange="applyWidth(this.value)" style="font-size:11px;font-weight:500;border:none;background:transparent;color:#1a49bd;cursor:pointer;outline:none;font-family:inherit;padding-right:4px;">
-          <option value="100%">너비 제한 없음</option>
-          <option value="1200px" selected>1200px</option>
-          <option value="1400px">1400px</option>
-          <option value="1600px">1600px</option>
-        </select>
-        <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="#1a49bd" stroke-width="1.2" stroke-linecap="round"/></svg>
-      </div>
+      <select id="width-select" onchange="applyWidth(this.value)" style="font-size:12px;padding:5px 10px;border:1px solid #d9dbe2;border-radius:4px;color:#444;background:#fff;cursor:pointer;outline:none;font-family:inherit;">
+        <option value="100%">너비 제한 없음</option>
+        <option value="1200px" selected>1200px</option>
+        <option value="1400px">1400px</option>
+        <option value="1600px">1600px</option>
+      </select>
     </div>
     <div class="result-area" id="result-area">
       <div class="empty-state">
@@ -910,7 +906,7 @@ KRDS CDN 사용 여부는 자유롭게 판단하세요.
 - 실제 공공기관 데이터 예시 사용
 - height는 실제 콘텐츠 높이(px 숫자만)
 - 와이어프레임은 width:100% 기준으로 작성하되, 내부 레이아웃은 max-width를 쓰지 말고 전체 너비를 활용할 것
-- 이미지 자리는 배경 #e8e8e8, 대각선 X 표시로 placeholder 처리할 것
+- 이미지나 차트 자리는 배경 #e8e8e8에 중앙에 짧은 텍스트 레이블만 표시할 것 (예: [이미지], [차트]). X 대각선 표시 금지.
 - 폰트는 system-ui, 전체 여백은 충분히 확보할 것`;
 }
 </script>
