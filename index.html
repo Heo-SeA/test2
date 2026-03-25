@@ -392,9 +392,9 @@
   <!-- 좌측 -->
   <div class="left-panel">
 
-    <div class="panel-section">
+    <!-- 설정 -->
+    <div class="panel-section" style="flex-shrink:0">
       <div class="panel-section-title">설정</div>
-
       <div class="tool-field">
         <label style="display:flex;align-items:center;justify-content:space-between;">
           Gemini API 키
@@ -409,25 +409,6 @@
         </div>
         <div class="key-status empty" id="key-status">API 키를 입력해주세요</div>
       </div>
-
-      <div class="tool-field">
-        <label>페이지 유형</label>
-        <select id="page-type">
-          <option value="">선택 (선택사항)</option>
-          <option value="목록/상세">목록 / 상세 페이지</option>
-          <option value="대시보드">통계 / 대시보드</option>
-          <option value="신청 폼">민원 / 신청 폼</option>
-          <option value="자료실">자료실 / 검색</option>
-          <option value="히스토리">히스토리 / 타임라인</option>
-          <option value="기타">기타</option>
-        </select>
-      </div>
-
-      <div class="tool-field">
-        <label>핵심 기능 / 구성 요소</label>
-        <textarea id="features" rows="3" placeholder="예) 시계열 타임라인, 클릭 시 우측 상세 패널, 탭 구조 (정보/수행/성과/자료실)"></textarea>
-      </div>
-
       <div class="tool-field">
         <label>제안 안 수</label>
         <div class="count-row">
@@ -438,13 +419,70 @@
       </div>
     </div>
 
-    <div class="chat-history" id="chat-history">
-      <div class="msg ai">안녕하세요! KRDS 기반 와이어프레임 설계 도구입니다. API 키 입력 후 요구사항을 보내주세요.</div>
+    <!-- 요구사항 양식 -->
+    <div style="flex:1;overflow-y:auto;padding:14px 16px 0;border-bottom:1px solid #eef0f4;">
+
+      <div style="margin-bottom:14px;">
+        <div class="panel-section-title" style="margin-bottom:8px;">서비스 개요</div>
+        <div class="tool-field">
+          <label>서비스 목적</label>
+          <textarea id="svc-purpose" rows="2" placeholder="예) 연구장비 통합 검색 및 예약 서비스"></textarea>
+        </div>
+        <div class="tool-field">
+          <label>주요 사용자</label>
+          <textarea id="svc-user" rows="2" placeholder="예) 연구원, 대학생, 기업 담당자"></textarea>
+        </div>
+        <div class="tool-field">
+          <label>핵심 문제</label>
+          <textarea id="svc-problem" rows="2" placeholder="예) 장비 검색 어려움, 예약 현황 파악 불가"></textarea>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div class="panel-section-title" style="margin-bottom:8px;">요구 기능</div>
+        <div class="tool-field">
+          <label>주요 기능 목록</label>
+          <textarea id="req-features" rows="4" placeholder="예) 장비 검색 (필터링), 예약 신청 및 승인, 예약 현황 확인, 마이페이지"></textarea>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div class="panel-section-title" style="margin-bottom:8px;">요청 결과</div>
+        <div style="display:flex;flex-direction:column;gap:7px;">
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#444;cursor:pointer;font-weight:400;">
+            <input type="checkbox" id="chk-ia" style="width:14px;height:14px;accent-color:#1a49bd;cursor:pointer;"> 정보구조 (IA)
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#444;cursor:pointer;font-weight:400;">
+            <input type="checkbox" id="chk-flow" style="width:14px;height:14px;accent-color:#1a49bd;cursor:pointer;"> 사용자 흐름 (Flow)
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#444;cursor:pointer;font-weight:400;">
+            <input type="checkbox" id="chk-wireframe" checked style="width:14px;height:14px;accent-color:#1a49bd;cursor:pointer;">
+            주요 화면 구성 (와이어프레임) <span style="font-size:10px;color:#1a49bd;">필수</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#444;cursor:pointer;font-weight:400;">
+            <input type="checkbox" id="chk-funcdef" style="width:14px;height:14px;accent-color:#1a49bd;cursor:pointer;"> 핵심 기능 정의
+          </label>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div class="panel-section-title" style="margin-bottom:8px;">추가 요청</div>
+        <div class="tool-field">
+          <textarea id="extra-request" rows="2" placeholder="예) A안은 사이드 메뉴, B안은 탭 중심으로 구성해주세요"></textarea>
+        </div>
+      </div>
+
     </div>
 
+    <!-- 히스토리 -->
+    <div class="chat-history" id="chat-history" style="max-height:120px;flex-shrink:0;">
+      <div class="msg ai">양식을 작성하고 전송해주세요. 추가 요청은 아래 채팅으로 입력하세요.</div>
+    </div>
+
+    <!-- 입력창 -->
     <div class="input-area">
       <div class="input-wrap">
-        <textarea id="chat-input" rows="1" placeholder="요구사항 또는 추가 요청 입력..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea id="chat-input" rows="1" placeholder="추가 요청 또는 수정 요청..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button class="send-btn" id="send-btn" onclick="sendMessage()">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M8 12V4M4 8l4-4 4 4"/>
@@ -635,7 +673,7 @@ async function sendMessage() {
   document.getElementById('send-btn').disabled = true;
   showLoading();
 
-  const fullPrompt = buildPrompt(userMsg || features, features, pageType);
+  const fullPrompt = buildPrompt(userMsg);
   conversationHistory.push({ role: 'user', parts: [{ text: fullPrompt }] });
 
   try {
@@ -695,11 +733,33 @@ async function sendMessage() {
   document.getElementById('send-btn').disabled = false;
 }
 
-function buildPrompt(msg, features, pageType) {
-  let p = msg;
-  if (features && features !== msg) p += `\n\n핵심 기능/구성요소: ${features}`;
-  if (pageType) p += `\n페이지 유형: ${pageType}`;
-  p += `\n\n제안 안 수: ${planCount}개`;
+function buildPrompt(msg) {
+  const purpose  = document.getElementById('svc-purpose')?.value.trim() || '';
+  const user     = document.getElementById('svc-user')?.value.trim() || '';
+  const problem  = document.getElementById('svc-problem')?.value.trim() || '';
+  const features = document.getElementById('req-features')?.value.trim() || '';
+  const extra    = document.getElementById('extra-request')?.value.trim() || '';
+
+  const chkIA       = document.getElementById('chk-ia')?.checked;
+  const chkFlow     = document.getElementById('chk-flow')?.checked;
+  const chkWire     = document.getElementById('chk-wireframe')?.checked;
+  const chkFuncDef  = document.getElementById('chk-funcdef')?.checked;
+
+  const requests = [];
+  if (chkIA)      requests.push('정보구조 (IA)');
+  if (chkFlow)    requests.push('사용자 흐름 (Flow)');
+  if (chkWire)    requests.push('주요 화면 구성 (와이어프레임)');
+  if (chkFuncDef) requests.push('핵심 기능 정의');
+
+  let p = '';
+  if (purpose)  p += `[서비스 목적]\n${purpose}\n\n`;
+  if (user)     p += `[주요 사용자]\n${user}\n\n`;
+  if (problem)  p += `[핵심 문제]\n${problem}\n\n`;
+  if (features) p += `[주요 기능 목록]\n${features}\n\n`;
+  if (requests.length) p += `[요청 결과]\n${requests.join(', ')}\n\n`;
+  if (extra)    p += `[추가 요청]\n${extra}\n\n`;
+  if (msg)      p += `[추가 메시지]\n${msg}\n\n`;
+  p += `제안 안 수: ${planCount}개`;
   return p;
 }
 
