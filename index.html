@@ -367,6 +367,19 @@
     font-size: 12px; color: #8b0000;
   }
 
+  /* 체크박스 강제 표시 (KRDS CSS 오버라이드) */
+  #chk-ia, #chk-flow, #chk-wireframe, #chk-funcdef {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 15px !important;
+    height: 15px !important;
+    appearance: checkbox !important;
+    -webkit-appearance: checkbox !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+  }
+
   /* key toggle */
   .api-key-wrap { position: relative; }
   .api-key-wrap input { padding-right: 36px; }
